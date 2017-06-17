@@ -16,7 +16,9 @@ public class WordCount {
   public static void wordCountJava8( String filename )
   {
     // Define a configuration to use to interact with Spark
-    SparkConf conf = new SparkConf().setMaster("local").setAppName("Work Count App");
+    SparkConf conf = new SparkConf()
+        .setMaster("local")
+        .setAppName("Work Count App");
 
     // Create a Java version of the Spark Context from the configuration
     JavaSparkContext sc = new JavaSparkContext(conf);
@@ -28,7 +30,8 @@ public class WordCount {
     JavaRDD<String> words = input.flatMap( s -> Arrays.asList( s.split( " " ) ) );
 
     // Java 8 with lambdas: transform the collection of words into pairs (word and 1) and then count them
-    JavaPairRDD<String, Integer> counts = words.mapToPair(t -> new Tuple2( t, 1 ) )
+    JavaPairRDD<String, Integer> counts = words
+        .mapToPair(t -> new Tuple2( t, 1 ) )
         .reduceByKey( (x, y) -> (int)x + (int)y );
 
     // Save the word count back out to a text file, causing evaluation.
